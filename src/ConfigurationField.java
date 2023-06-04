@@ -13,7 +13,8 @@ public class ConfigurationField extends JFrame {
 
     private static final JRadioButton PLAYER_VS_AI_BUTTON = new JRadioButton("Игрок против компьютера");
 
-    private final GameField gameField = new GameField();
+    ConfigurationField configurationField;
+
 
     public ConfigurationField() {
         super("Configure Game");
@@ -21,6 +22,7 @@ public class ConfigurationField extends JFrame {
         Container container = this.getContentPane();
         SpringLayout layout = new SpringLayout();
         container.setLayout(layout);
+        configurationField = this;
 
         container.add(CHOOSE_GAME_MODE);
 
@@ -53,8 +55,16 @@ public class ConfigurationField extends JFrame {
         START_GAME_BUTTON.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameField.setVisible(true);
                 setVisible(false);
+                dispose();
+                GameField gameField;
+                if (PLAYER_VS_AI_BUTTON.isSelected())
+                {
+                    gameField = new PlayerVsAI(configurationField);
+                } else {
+                    gameField = new PlayerVsPlayer(configurationField);
+                }
+                gameField.setVisible(true);
             }
         });
 
